@@ -54,9 +54,13 @@ local loopFrame = CreateFrame("Frame")
 
 loopFrame:SetScript("OnUpdate", function(self, elapsed)
 	box.texture:SetColorTexture(0, 0, 0, 1)
+
 	if enableaddon then
+		local drinkBuffName = GetSpellInfo(430)
+		local drinkname = AuraUtil.FindAuraByName(drinkBuffName, "player", "HELPFUL")
+
 		if IsInGroup() then
-			if UnitAffectingCombat("party1") then
+			if UnitAffectingCombat("party1") and not drinkname then
 				box.texture:SetColorTexture(1, 1, 0, 1)
 				if UnitExists("party1target") and UnitIsVisible("party1target") then
 					if not UnitIsUnit("target", "party1target") and enabletarget then
