@@ -32,7 +32,7 @@ checkbox2:SetPoint("TOP", checkbox, "BOTTOM", 0, -5) -- Position under the first
 checkbox2.text = checkbox2:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 checkbox2.text:SetPoint("LEFT", checkbox2, "RIGHT", 4, 0)
 checkbox2.text:SetText("Enable Target")
-checkbox2:SetChecked(false)
+checkbox2:SetChecked(enabletarget)
 checkbox2:SetScript("OnClick", function(self)
 	if self:GetChecked() then
 		print("Second checkbox checked")
