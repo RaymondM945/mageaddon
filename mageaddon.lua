@@ -63,8 +63,8 @@ loopFrame:SetScript("OnUpdate", function(self, elapsed)
 									if castspell ~= "Frostbolt" and usable then
 										print("You can cast " .. spellName .. " on your target.")
 										box.texture:SetColorTexture(0, 1, 0, 1)
-									else
-										box.texture:SetColorTexture(1, 1, 0, 1)
+									elseif not IsAutoRepeatSpell("Shoot") then
+										box.texture:SetColorTexture(1, 0, 0, 1)
 									end
 								end
 							end
