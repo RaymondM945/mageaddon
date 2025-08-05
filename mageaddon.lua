@@ -26,22 +26,22 @@ checkbox:SetScript("OnClick", function(self)
 	end
 end)
 
-local checkbox2 = CreateFrame("CheckButton", "MyAddonCheckbox2", UIParent, "UICheckButtonTemplate")
-checkbox2:SetSize(24, 24)
-checkbox2:SetPoint("TOP", checkbox, "BOTTOM", 0, -5) -- Position under the first checkbox with a 5px gap
-checkbox2.text = checkbox2:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-checkbox2.text:SetPoint("LEFT", checkbox2, "RIGHT", 4, 0)
-checkbox2.text:SetText("Enable Target")
-checkbox2:SetChecked(enabletarget)
-checkbox2:SetScript("OnClick", function(self)
-	if self:GetChecked() then
-		print("Second checkbox checked")
-		enabletarget = true
-	else
-		print("Second checkbox unchecked")
-		enabletarget = false
-	end
-end)
+-- local checkbox2 = CreateFrame("CheckButton", "MyAddonCheckbox2", UIParent, "UICheckButtonTemplate")
+-- checkbox2:SetSize(24, 24)
+-- checkbox2:SetPoint("TOP", checkbox, "BOTTOM", 0, -5) -- Position under the first checkbox with a 5px gap
+-- checkbox2.text = checkbox2:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+-- checkbox2.text:SetPoint("LEFT", checkbox2, "RIGHT", 4, 0)
+-- checkbox2.text:SetText("Enable Target")
+-- checkbox2:SetChecked(enabletarget)
+-- checkbox2:SetScript("OnClick", function(self)
+-- 	if self:GetChecked() then
+-- 		print("Second checkbox checked")
+-- 		enabletarget = true
+-- 	else
+-- 		print("Second checkbox unchecked")
+-- 		enabletarget = false
+-- 	end
+-- end)
 
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
@@ -62,38 +62,32 @@ loopFrame:SetScript("OnUpdate", function(self, elapsed)
 		if IsInGroup() then
 			if UnitAffectingCombat("party1") and not drinkname then
 				box.texture:SetColorTexture(1, 1, 0, 1)
-				if UnitExists("party1target") and UnitIsVisible("party1target") then
-					if not UnitIsUnit("target", "party1target") and enabletarget then
-						print("You are NOT targeting the same target as party1.")
-						box.texture:SetColorTexture(1, 1, 1, 1)
-					else
-						if UnitExists("target") and not UnitIsDead("target") then
-							local currentHP = UnitHealth("target")
-							local maxHP = UnitHealthMax("target")
+				if UnitExists("party1target") and UnitIsVisible("party1target") and not UnitIsDead("party1target") then
+					local currentHP = UnitHealth("party1target")
+					local maxHP = UnitHealthMax("party1target")
 
-							local hpPercent = (currentHP / maxHP) * 100
+					local hpPercent = (currentHP / maxHP) * 100
 
-							if hpPercent < 95 then
-								local spellName = "Frostbolt"
-								local castspell = UnitCastingInfo("player")
-								local usable, noMana = IsUsableSpell(spellName)
-								local channelspell = UnitChannelInfo("player")
+					if hpPercent < 95 then
+						local spellName = "Frostbolt"
+						local castspell = UnitCastingInfo("player")
+						local usable, noMana = IsUsableSpell(spellName)
+						local channelspell = UnitChannelInfo("player")
 
-								if channelspell then
-									print("You are currently channeling " .. channelspell .. ".")
-								else
-									if castspell ~= "Frostbolt" and usable then
-										print("You can cast " .. spellName .. " on your target.")
-										box.texture:SetColorTexture(0, 1, 0, 1)
-									elseif not IsAutoRepeatSpell("Shoot") then
-										box.texture:SetColorTexture(1, 0, 0, 1)
-									end
-								end
+						if channelspell then
+							print("You are currently channeling " .. channelspell .. ".")
+						else if castingSpell == "Polymorph" then
+							print("You are currently casting " .. castingSpell .. ".")
+						else
+							if castspell ~= "Frostbolt" and usable then
+								print("You can cast " .. spellName .. " on your target.")
+								box.texture:SetColorTexture(0, 1, 0, 1)
+							elseif not IsAutoRepeatSpell("Shoot") then
+								box.texture:SetColorTexture(1, 0, 0, 1)
 							end
 						end
+			
 					end
-				else
-					print("Party member's target is not visible or does not exist.")
 				end
 			else
 				print("Party member is not in combat.")
@@ -102,3 +96,37 @@ loopFrame:SetScript("OnUpdate", function(self, elapsed)
 		end
 	end
 end)
+
+-- if UnitExists("party1target") and UnitIsVisible("party1target") then
+-- 	if not UnitIsUnit("target", "party1target") and enabletarget then
+-- 		print("You are NOT targeting the same target as party1.")
+-- 		box.texture:SetColorTexture(1, 1, 1, 1)
+-- 	else
+-- 		if UnitExists("target") and not UnitIsDead("target") then
+-- 			local currentHP = UnitHealth("target")
+-- 			local maxHP = UnitHealthMax("target")
+
+-- 			local hpPercent = (currentHP / maxHP) * 100
+
+-- 			if hpPercent < 95 then
+-- 				local spellName = "Frostbolt"
+-- 				local castspell = UnitCastingInfo("player")
+-- 				local usable, noMana = IsUsableSpell(spellName)
+-- 				local channelspell = UnitChannelInfo("player")
+
+-- 				if channelspell then
+-- 					print("You are currently channeling " .. channelspell .. ".")
+-- 				else
+-- 					if castspell ~= "Frostbolt" and usable then
+-- 						print("You can cast " .. spellName .. " on your target.")
+-- 						box.texture:SetColorTexture(0, 1, 0, 1)
+-- 					elseif not IsAutoRepeatSpell("Shoot") then
+-- 						box.texture:SetColorTexture(1, 0, 0, 1)
+-- 					end
+-- 				end
+-- 			end
+-- 		end
+-- 	end
+-- else
+-- 	print("Party member's target is not visible or does not exist.")
+-- end
